@@ -1,25 +1,27 @@
+const { BadRequest } = require('http-errors');
+
 const dnaMinLength = 4;
 
 const validateDna = (dna) => {
   if (!Array.isArray(dna)) {
-    throw new Error('Invalid DNA');
+    throw new BadRequest('Invalid DNA');
   }
 
   const len = dna.length;
 
   if (len < dnaMinLength) {
-    throw new Error('Invalid DNA length');
+    throw new BadRequest('Invalid DNA length');
   }
 
   for (let k = 0; k < len; k += 1) {
     const sequence = dna[k];
 
     if (typeof sequence !== 'string') {
-      throw new Error('Invalid DNA elements');
+      throw new BadRequest('Invalid DNA elements');
     }
 
     if (sequence.length !== len) {
-      throw new Error('Invalid DNA elements length');
+      throw new BadRequest('Invalid DNA elements length');
     }
 
     // Only the 4 nitrogen bases are allowed.
@@ -30,7 +32,7 @@ const validateDna = (dna) => {
       const nitrogenBase = sequenceBases[i];
 
       if (!nitrogenBases.includes(nitrogenBase)) {
-        throw new Error('Invalid DNA elements nitrogen base');
+        throw new BadRequest('Invalid DNA elements nitrogen base');
       }
     }
   }

@@ -2,21 +2,23 @@
   "name": "dna-mutations",
   "version": "0.1.0",
   "description": "",
-  "main": "src/server.js",
   "private": true,
   "engines": {
-    "node": "12.13.0"
+    "node": "^12"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=./src node .",
-    "test": "cross-env NODE_PATH=./src jest ."
+    "lint": "eslint --ext .js .",
+    "test": "npm run lint && npm run test:jest",
+    "test:jest": "cross-env NODE_PATH=./src jest",
+    "test:coverage": "cross-env NODE_PATH=./src jest --coverage"
   },
   "author": "Walberto Ibarra <waldo.ibarra92@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
-    "cross-env": "7.0.0"
+    "http-errors": "1.7.3"
   },
   "devDependencies": {
+    "cross-env": "7.0.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.20.1",
