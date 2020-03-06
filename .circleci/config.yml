@@ -1,0 +1,88 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+aliases:
+  - &filter-prod-branch
+    branches:
+      only:
+        - master
+
+  - &filter-dev-branch
+    branches:
+      only:
+        - develop
+
+  - &root-restore-npm-cache
+    keys:
+      - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies-
+
+  - &save-cache
+    paths:
+        - node_modules
+    key: v1-dependencies-{{ checksum "package.json" }}
+
+  - &npm-install
+    name: Install npm dependencies
+    command: |
+      npm install
+
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:12
+  working_directory: ~/app
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *root-restore-npm-cache
+      - run: *npm-install
+      - save_cache: *save-cache
+
+  deploy-dev:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *root-restore-npm-cache
+      - run: *npm-install
+      - save_cache: *save-cache
+      - run: npm run deploy:dev
+
+  deploy-prod:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *root-restore-npm-cache
+      - run: *npm-install
+      - save_cache: *save-cache
+      - run: npm run deploy:prod
+
+workflows:
+  version: 2
+
+  # Deploy to dev only when a PR from feature or fixes arrives to develop
+  build-deploy-dev:
+    jobs:
+      - build:
+          filters: *filter-dev-branch
+      - deploy-dev:
+          requires:
+            - build
+
+  # Avoid Prod releases adding approval step and different configs
+  build-deploy-prod:
+    jobs:
+      - build:
+          filters: *filter-prod-branch
+      - hold:
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          requires: # We only run the "hold" job when build has succeeded
+           - build
+      - deploy-prod:
+          requires:
+            - hold
