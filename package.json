@@ -7,6 +7,10 @@
     "node": "^12"
   },
   "scripts": {
+    "deploy": "serverless deploy",
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "dev": "cross-env NODE_PATH=./src serverless offline",
     "lint": "eslint --ext .js .",
     "test": "npm run lint && npm run test:jest",
     "test:jest": "cross-env NODE_PATH=./src jest",
@@ -23,6 +27,8 @@
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.20.1",
     "eslint-plugin-jest": "23.8.1",
-    "jest": "25.1.0"
+    "jest": "25.1.0",
+    "serverless": "1.65.0",
+    "serverless-offline": "5.12.1"
   }
 }

@@ -1,0 +1,19 @@
+service: dna-mutations
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${file(serverless.env.yml):${self:provider.stage}.region}
+  environment: ${file(serverless.env.yml):${self:provider.stage}.environment}
+
+functions:
+  hasMutation:
+    handler: src/interfaces/http/handlers/mutation.hasMutationHandler
+    events:
+      - http:
+          path: mutation
+          method: post
