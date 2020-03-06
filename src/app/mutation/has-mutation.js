@@ -1,4 +1,4 @@
-const { BadRequest } = require('http-errors');
+const { BadRequest } = require('domain/lib/http-errors');
 
 const dnaMinLength = 4;
 

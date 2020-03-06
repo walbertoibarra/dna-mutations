@@ -1,14 +1,25 @@
 service: dna-mutations
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-offline
+  - serverless-ssm-fetch
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
-  region: ${file(serverless.env.yml):${self:provider.stage}.region}
-  environment: ${file(serverless.env.yml):${self:provider.stage}.environment}
+  region: us-west-2
+  environment:
+    NODE_ENV: ${self:custom.nodeEnv.${opt:stage, self:provider.stage}}
+    NODE_PATH: ./src
+
+custom:
+  nodeEnv:
+    dev: development
+    prod: production
+  serverlessSsmFetch:
+    DB_CONNECTION_STRING: /apps/dna-mutations/db_connection_string
 
 functions:
   hasMutation:
