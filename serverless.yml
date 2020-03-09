@@ -2,6 +2,7 @@ service: dna-mutations
 
 plugins:
   - serverless-dotenv-plugin
+  - serverless-dynamodb-local
   - serverless-offline
   - serverless-ssm-fetch
 
@@ -20,6 +21,15 @@ custom:
     prod: production
   serverlessSsmFetch:
     DB_CONNECTION_STRING: /apps/dna-mutations/db_connection_string
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true # Execute all the migration upon DynamoDB Local Start.
 
 functions:
   hasMutation:
@@ -28,3 +38,6 @@ functions:
       - http:
           path: mutation
           method: post
+
+resources:
+  Resources: ${file(migrations/mutation.yml)}
