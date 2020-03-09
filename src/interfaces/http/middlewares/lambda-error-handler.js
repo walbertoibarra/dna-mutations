@@ -4,11 +4,15 @@ const lambdaErrorHandler = (handler) => async (event, context) => {
 
     return response;
   } catch (error) {
+    const defaultStatusCode = 500;
+    const statusCode = error.statusCode || error.status || defaultStatusCode;
+    const message = statusCode >= defaultStatusCode ? 'Something unexpected happened' : error.message;
+
     return {
-      statusCode: error.statusCode || error.status || 500,
+      statusCode,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: error.message,
+        message,
       }),
     };
   }
