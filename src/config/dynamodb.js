@@ -1,8 +1,13 @@
 const { env } = process;
 
-module.exports = {
+const config = {
   region: env.REGION,
-  endpoint: env.DYNAMODB_ENDPOINT,
   accessKeyId: env.ACCESS_KEY,
   secretAccessKey: env.SECRET,
 };
+
+if (env.NODE_ENV === 'development') {
+  config.endpoint = env.DYNAMODB_ENDPOINT;
+}
+
+module.exports = config;

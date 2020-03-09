@@ -12,15 +12,17 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-west-2
   environment:
-    NODE_ENV: ${self:custom.nodeEnv.${opt:stage, self:provider.stage}}
+    NODE_ENV: ${self:custom.nodeEnv.${self:provider.stage}}
     NODE_PATH: ./src
+    REGION: ${self:provider.region}
 
 custom:
   nodeEnv:
-    dev: development
+    dev: staging
     prod: production
   serverlessSsmFetch:
-    DB_CONNECTION_STRING: /apps/dna-mutations/db_connection_string
+    ACCESS_KEY: /apps/dna-mutations/access_key
+    SECRET: /apps/dna-mutations/secret
   dynamodb:
     stages:
       - dev
