@@ -1,25 +1,51 @@
 {
   "name": "dna-mutations",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
   "private": true,
   "engines": {
-    "node": "12.13.0"
+    "node": "^12"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=./src node .",
-    "test": "cross-env NODE_PATH=./src jest ."
+    "deploy": "serverless deploy",
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "dev": "cross-env NODE_PATH=./src serverless offline start",
+    "lint": "eslint --ext .js .",
+    "postinstall": "serverless dynamodb install",
+    "test": "npm run lint && npm run test:coverage",
+    "test:coverage": "cross-env NODE_PATH=./src jest --coverage --silent"
   },
   "author": "Walberto Ibarra <waldo.ibarra92@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
-    "cross-env": "7.0.0"
+    "aws-sdk": "2.635.0"
   },
   "devDependencies": {
+    "cross-env": "7.0.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.20.1",
     "eslint-plugin-jest": "23.8.1",
-    "jest": "25.1.0"
+    "jest": "25.1.0",
+    "serverless": "1.65.0",
+    "serverless-dotenv-plugin": "2.3.2",
+    "serverless-dynamodb-local": "0.2.30",
+    "serverless-offline": "5.12.1",
+    "serverless-ssm-fetch": "1.0.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   }
 }

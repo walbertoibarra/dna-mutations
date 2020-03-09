@@ -1,0 +1,52 @@
+service: dna-mutations
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-ssm-fetch
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: us-west-2
+  environment:
+    NODE_ENV: ${self:custom.nodeEnv.${self:provider.stage}}
+    NODE_PATH: ./src
+    REGION: ${self:provider.region}
+
+custom:
+  nodeEnv:
+    dev: staging
+    prod: production
+  serverlessSsmFetch:
+    ACCESS_KEY: /apps/dna-mutations/access_key
+    SECRET: /apps/dna-mutations/secret
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true # Execute all the migration upon DynamoDB Local Start.
+
+functions:
+  hasMutation:
+    handler: src/interfaces/http/handlers/mutation.hasMutationHandler
+    events:
+      - http:
+          path: /mutation
+          method: post
+
+  stats:
+    handler: src/interfaces/http/handlers/stats.statsHandler
+    events:
+      - http:
+          path: /stats
+          method: get
+
+resources:
+  Resources: ${file(migrations/mutation.yml)}
