@@ -6,7 +6,12 @@ const lambdaErrorHandler = (handler) => async (event, context) => {
   } catch (error) {
     const defaultStatusCode = 500;
     const statusCode = error.statusCode || error.status || defaultStatusCode;
-    const message = statusCode >= defaultStatusCode ? 'Something unexpected happened' : error.message;
+    let { message } = error;
+
+    if (statusCode >= defaultStatusCode) {
+      message = 'Something unexpected happened';
+      console.error(error.stack);
+    }
 
     return {
       statusCode,

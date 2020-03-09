@@ -1,4 +1,4 @@
-jest.mock('../database/client');
+jest.mock('infra/database/client');
 
 const { client } = require('infra/database/client');
 const mutationRepository = require('infra/repositories/mutation-repository');
@@ -15,7 +15,7 @@ describe('infra.repositories.mutationRepository', () => {
         TableName: 'mutation',
         Item: {
           id,
-          mutated,
+          mutated: mutated.toString(),
           createdAt: expect.any(Number),
           updatedAt: expect.any(Number),
         },
@@ -35,6 +35,14 @@ describe('infra.repositories.mutationRepository', () => {
           id,
         },
       });
+    });
+  });
+
+  describe('getStats', () => {
+    it('Calls `query` twice', async () => {
+      await mutationRepository.getStats();
+
+      expect(client.query).toHaveBeenCalledTimes(2);
     });
   });
 });

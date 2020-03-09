@@ -14,7 +14,7 @@
     "lint": "eslint --ext .js .",
     "postinstall": "serverless dynamodb install",
     "test": "npm run lint && npm run test:coverage",
-    "test:coverage": "cross-env NODE_PATH=./src jest --coverage"
+    "test:coverage": "cross-env NODE_PATH=./src jest --coverage --silent"
   },
   "author": "Walberto Ibarra <waldo.ibarra92@gmail.com>",
   "license": "UNLICENSED",

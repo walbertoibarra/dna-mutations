@@ -26,7 +26,7 @@ const hasMutationHandler = lambdaErrorHandler(async (event) => {
     statusCode: model.mutated ? 200 : 403,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      hasMutation: model.mutated,
+      hasMutation: JSON.parse(model.mutated),
     }),
   };
 });

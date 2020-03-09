@@ -6,7 +6,7 @@ const create = async (id, mutated) => {
     TableName: 'mutation',
     Item: {
       id,
-      mutated,
+      mutated: mutated.toString(),
       createdAt: now,
       updatedAt: now,
     },
@@ -29,7 +29,37 @@ const findById = async (id) => {
   return result.Item;
 };
 
+const countMutationsByMutated = async (mutated) => {
+  const params = {
+    TableName: 'mutation',
+    IndexName: 'mutatedCountIndex',
+    KeyConditionExpression: '#mutated = :mutatedValue',
+    ExpressionAttributeNames: {
+      '#mutated': 'mutated',
+    },
+    ExpressionAttributeValues: {
+      ':mutatedValue': mutated.toString(),
+    },
+    Select: 'COUNT',
+  };
+
+  return client.query(params).promise();
+};
+
+const getStats = async () => {
+  const [mutationsCount, noMutationsCount] = await Promise.all([
+    countMutationsByMutated(true),
+    countMutationsByMutated(false),
+  ]);
+
+  return {
+    mutationsCount: mutationsCount.Count,
+    noMutationsCount: noMutationsCount.Count,
+  };
+};
+
 module.exports = {
   create,
   findById,
+  getStats,
 };

@@ -36,8 +36,15 @@ functions:
     handler: src/interfaces/http/handlers/mutation.hasMutationHandler
     events:
       - http:
-          path: mutation
+          path: /mutation
           method: post
+
+  stats:
+    handler: src/interfaces/http/handlers/stats.statsHandler
+    events:
+      - http:
+          path: /stats
+          method: get
 
 resources:
   Resources: ${file(migrations/mutation.yml)}

@@ -5,9 +5,21 @@ mutation:
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
+      - AttributeName: mutated
+        AttributeType: S
     KeySchema:
       - AttributeName: id
         KeyType: HASH
     ProvisionedThroughput:
       ReadCapacityUnits: 1
       WriteCapacityUnits: 1
+    GlobalSecondaryIndexes:
+      - IndexName: mutatedCountIndex
+        KeySchema:
+          - AttributeName: mutated
+            KeyType: HASH
+        Projection:
+          ProjectionType: KEYS_ONLY
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
