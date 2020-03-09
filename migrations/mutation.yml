@@ -1,7 +1,7 @@
 mutation:
   Type: AWS::DynamoDB::Table
   Properties:
-    TableName: mutation
+    TableName: "${self:custom.dynamodbTablePrefix.${self:provider.stage}}mutation"
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S

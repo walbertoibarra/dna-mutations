@@ -17,9 +17,6 @@ provider:
     REGION: ${self:provider.region}
 
 custom:
-  nodeEnv:
-    dev: staging
-    prod: production
   serverlessSsmFetch:
     ACCESS_KEY: /apps/dna-mutations/access_key
     SECRET: /apps/dna-mutations/secret
@@ -32,6 +29,12 @@ custom:
       heapInitial: 200m
       heapMax: 1g
       migrate: true # Execute all the migration upon DynamoDB Local Start.
+  nodeEnv:
+    dev: staging
+    prod: production
+  dynamodbTablePrefix:
+    dev: "dev_"
+    prod: ""
 
 functions:
   hasMutation:
