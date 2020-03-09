@@ -22,11 +22,13 @@ const hasMutationHandler = lambdaErrorHandler(async (event) => {
     model = await mutationRepository.create(id, mutated);
   }
 
+  const mutated = JSON.parse(model.mutated);
+
   return {
-    statusCode: model.mutated ? 200 : 403,
+    statusCode: mutated ? 200 : 403,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      hasMutation: JSON.parse(model.mutated),
+      hasMutation: mutated,
     }),
   };
 });
