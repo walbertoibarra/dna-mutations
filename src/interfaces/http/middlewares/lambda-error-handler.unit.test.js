@@ -25,7 +25,7 @@ describe('interfaces > http > middlewares > lambdaErrorHandler', () => {
     await expect(handler()).resolves.toEqual({
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: '{"message":"boom"}',
+      body: '{"message":"Something unexpected happened"}',
     });
   });
 });
