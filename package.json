@@ -1,15 +1,14 @@
 {
   "name": "dna-mutations",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "private": true,
   "engines": {
     "node": "^12"
   },
   "scripts": {
-    "deploy": "serverless deploy",
-    "deploy:dev": "serverless deploy --stage dev",
-    "deploy:prod": "serverless deploy --stage prod",
+    "deploy:staging": "serverless deploy --stage staging",
+    "deploy:production": "serverless deploy --stage production",
     "dev": "cross-env NODE_PATH=./src serverless offline start",
     "lint": "eslint --ext .js .",
     "postinstall": "serverless dynamodb install",

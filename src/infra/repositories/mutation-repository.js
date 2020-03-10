@@ -1,9 +1,10 @@
 const { client } = require('infra/database/client');
+const DynamoDbTable = require('domain/enum/dynamodb-table');
 
 const create = async (id, mutated) => {
   const now = new Date().getTime();
   const params = {
-    TableName: 'mutation',
+    TableName: DynamoDbTable.Mutation,
     Item: {
       id,
       mutated: mutated.toString(),
@@ -19,7 +20,7 @@ const create = async (id, mutated) => {
 
 const findById = async (id) => {
   const params = {
-    TableName: 'mutation',
+    TableName: DynamoDbTable.Mutation,
     Key: {
       id,
     },
@@ -31,7 +32,7 @@ const findById = async (id) => {
 
 const countMutationsByMutated = async (mutated) => {
   const params = {
-    TableName: 'mutation',
+    TableName: DynamoDbTable.Mutation,
     IndexName: 'mutatedCountIndex',
     KeyConditionExpression: '#mutated = :mutatedValue',
     ExpressionAttributeNames: {
