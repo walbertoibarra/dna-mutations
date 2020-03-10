@@ -9,12 +9,13 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'development'}
   region: us-west-2
   environment:
-    NODE_ENV: ${self:custom.nodeEnv.${self:provider.stage}}
+    NODE_ENV: ${self:provider.stage}
     NODE_PATH: ./src
     REGION: ${self:provider.region}
+    DYNAMODB_TABLE_PREFIX: ${self:custom.dynamodbTablePrefix.${self:provider.stage}}
 
 custom:
   serverlessSsmFetch:
@@ -22,19 +23,17 @@ custom:
     SECRET: /apps/dna-mutations/secret
   dynamodb:
     stages:
-      - dev
+      - development
     start:
       port: 8000
       inMemory: true
       heapInitial: 200m
       heapMax: 1g
       migrate: true # Execute all the migration upon DynamoDB Local Start.
-  nodeEnv:
-    dev: staging
-    prod: production
   dynamodbTablePrefix:
-    dev: "dev_"
-    prod: ""
+    development: ""
+    staging: "dev_"
+    production: ""
 
 functions:
   hasMutation:

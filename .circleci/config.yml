@@ -54,7 +54,7 @@ jobs:
       - restore_cache: *root-restore-npm-cache
       - run: *npm-install
       - save_cache: *save-cache
-      - run: npm run deploy:dev
+      - run: npm run deploy:staging
 
   deploy-prod:
     <<: *defaults
@@ -63,7 +63,7 @@ jobs:
       - restore_cache: *root-restore-npm-cache
       - run: *npm-install
       - save_cache: *save-cache
-      - run: npm run deploy:prod
+      - run: npm run deploy:production
 
 workflows:
   version: 2
